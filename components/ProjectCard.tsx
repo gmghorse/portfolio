@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Project } from "@/data/site";
 
 export default function ProjectCard({ project }: { project: Project }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const screenshots = project.screenshots;
   const active = screenshots[activeIndex];
 
@@ -35,6 +37,51 @@ export default function ProjectCard({ project }: { project: Project }) {
             </li>
           ))}
         </ul>
+        {project.title === "EV Charging Edge Server" && (
+          <Link
+            href="/projects/ev-charging-edge-server"
+            className="mt-6 inline-flex items-center gap-2 border-b border-[#ff5a00] pb-1 text-sm font-medium transition-colors hover:text-[#ff5a00]"
+          >
+            Open full case study <span aria-hidden="true">↗</span>
+          </Link>
+        )}
+        <button
+          type="button"
+          onClick={() => setDetailsOpen((open) => !open)}
+          aria-expanded={detailsOpen}
+          className="mt-7 inline-flex items-center gap-2 border-b border-[#ff5a00] pb-1 text-sm font-medium transition-colors hover:text-[#ff5a00] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff5a00]"
+        >
+          {detailsOpen ? "Hide project details" : "Explore the project"}
+          <motion.span animate={{ rotate: detailsOpen ? 180 : 0 }} aria-hidden="true">⌄</motion.span>
+        </button>
+        <AnimatePresence initial={false}>
+          {detailsOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full overflow-hidden"
+            >
+              <div className="max-w-md border-t border-black/10 pt-5 mt-5">
+                <h4 className="text-xs font-semibold uppercase tracking-[0.16em] text-black/50">Overview</h4>
+                <p className="mt-2 leading-relaxed text-black/70">{project.overview}</p>
+                <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-black/50">How it works</h4>
+                <ol className="mt-3 space-y-2">
+                  {project.workflow.map((step, index) => (
+                    <li key={step} className="flex gap-3 text-sm leading-relaxed text-black/70">
+                      <span className="font-mono text-[#ff5a00]">0{index + 1}</span><span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+                <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-black/50">Design focus</h4>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {project.focus.map((item) => <li key={item} className="rounded-lg bg-black/[0.04] px-3 py-2 text-xs text-black/70">{item}</li>)}
+                </ul>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {active && (
@@ -96,6 +143,23 @@ export default function ProjectCard({ project }: { project: Project }) {
               </>
             )}
           </div>
+          {screenshots.length > 1 && (
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1" aria-label={`${project.title} screenshots`}>
+              {screenshots.map((shot, index) => (
+                <button
+                  key={shot.src}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  aria-label={`View ${project.title} screenshot ${index + 1}`}
+                  aria-pressed={index === activeIndex}
+                  className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border bg-[#f4f3f1] transition sm:h-16 sm:w-24 ${index === activeIndex ? "border-[#ff5a00] ring-2 ring-[#ff5a00]/20" : "border-black/10 opacity-70 hover:opacity-100"}`}
+                >
+                  <Image src={shot.src} alt="" fill sizes="96px" className="object-contain p-1" />
+                </button>
+              ))}
+              <span className="self-center pl-1 text-xs text-black/45">Select a view</span>
+            </div>
+          )}
         </div>
       )}
     </motion.article>
