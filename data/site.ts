@@ -37,7 +37,7 @@ export const featuredProjects: Project[] = [
         title: "Phone Case Design App",
         summary:
             "A mobile app where people design their own phone case: pick a phone model, add artwork and text, and preview the result.",
-        tags: ["Flutter", "Dart"],
+        tags: ["React", "Next js"],
         aspect: "wide",
         screenshots: [
             { src: "/case_cobra/Screenshot 2026-11-16 211641.png", alt: "Phone case design project screenshot" },
