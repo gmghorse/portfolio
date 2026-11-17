@@ -3,9 +3,9 @@
 export const site = {
     name: "Gabriel Mamman",
     role: "Software engineering student",
-    headline: "I build backend systems and mobile apps.",
+    headline: "I build backend systems and web apps.",
     intro:
-        "I'm a final-year software engineering student. I enjoy working close to the metal in Rust and C++, and shipping real apps with Flutter and Postgres.",
+        "I'm a final-year software engineering student. I enjoy working close to the metal in Rust and C++, and shipping web apps with Flutter and Postgres.",
     email: "gmghorse@gmail.com",
     github: "",
     linkedin: "",
